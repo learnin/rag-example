@@ -1,6 +1,6 @@
 from langchain.globals import set_debug
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnablePassthrough
+from langchain_core.runnables import Runnable, RunnablePassthrough
 from langchain_openai import ChatOpenAI
 
 from chroma_vectore_store import ChromaVectoreStore
@@ -8,7 +8,7 @@ from embedding import create_embedding_model
 from hana_vectore_store import HanaVectoreStore
 
 
-def main(vector_store):
+def main(vector_store: HanaVectoreStore | ChromaVectoreStore) -> None:
     set_debug(True)
 
     query = "2024年の流行語大賞は？"
@@ -20,20 +20,18 @@ Context: {context}
 Answer:
 """
     prompt = ChatPromptTemplate.from_template(template)
-    llm = ChatOpenAI(model_name="gpt-4o-mini")
+    llm = ChatOpenAI(model="gpt-4o-mini")
 
     vector_store.open()
     try:
-        chain = (
-            {"context": vector_store.as_retriever(), "question": RunnablePassthrough()} | prompt | llm
-        )
+        chain: Runnable = {"context": vector_store.as_retriever(), "question": RunnablePassthrough()} | prompt | llm
         response = chain.invoke(query)
         print(response.content)
     finally:
         vector_store.close()
 
 
-def similarity_search(vector_store):
+def similarity_search(vector_store: HanaVectoreStore | ChromaVectoreStore) -> None:
     query = "2024年の流行語大賞は？"
     vector_store.open()
     try:
