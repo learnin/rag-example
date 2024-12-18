@@ -13,13 +13,13 @@ def main(vector_store: HanaVectoreStore | ChromaVectoreStore) -> None:
     doc_path = "./docs/新語・流行語大賞-Wikipedia.html"
     loader = UnstructuredHTMLLoader(doc_path)
     docs = loader.load()
-    chunked_docs = split_docs(docs, chunk_size=150)
+    chunked_docs = split_docs(docs, 512, 128)
     # print(chunked_docs)
     vector_store.add_documents(chunked_docs)
 
 
-def split_docs(docs: Iterable[Document], chunk_size: int) -> list[Document]:
-    text_splitter = CharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=0)
+def split_docs(docs: Iterable[Document], chunk_size: int, chunk_overlap: int) -> list[Document]:
+    text_splitter = CharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
     return text_splitter.split_documents(docs)
 
 
