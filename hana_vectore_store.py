@@ -10,13 +10,12 @@ from langchain_core.vectorstores import VectorStore, VectorStoreRetriever
 VECTORE_STORE_TABLE_NAME = "RAG_EXAMPLE_VECTOR_STORE"
 
 
-class HanaVectoreStore:
+class HanaVectorStore:
     def __init__(self, embedding_model: Embeddings) -> None:
         self._conn = None
         self._embedding_model = embedding_model
 
     def add_documents(self, docs: list[Document]) -> None:
-        conn = None
         try:
             self.open()
             vector_store = self._get_vector_store()

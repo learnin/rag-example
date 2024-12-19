@@ -6,10 +6,10 @@ from langchain_text_splitters.character import CharacterTextSplitter
 
 from chroma_vectore_store import ChromaVectoreStore
 from embedding import create_embedding_model
-from hana_vectore_store import HanaVectoreStore
+from hana_vectore_store import HanaVectorStore
 
 
-def main(vector_store: HanaVectoreStore | ChromaVectoreStore) -> None:
+def main(vector_store: HanaVectorStore | ChromaVectoreStore) -> None:
     doc_path = "./docs/新語・流行語大賞-Wikipedia.html"
     loader = UnstructuredHTMLLoader(doc_path)
     docs = loader.load()
@@ -25,6 +25,6 @@ def split_docs(docs: Iterable[Document], chunk_size: int, chunk_overlap: int) ->
 
 if __name__ == "__main__":
     embedding_model = create_embedding_model()
-    vector_store = HanaVectoreStore(embedding_model)
+    vector_store = HanaVectorStore(embedding_model)
     # vector_store = ChromaVectoreStore(embedding_model)
     main(vector_store)

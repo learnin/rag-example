@@ -5,10 +5,10 @@ from langchain_openai import ChatOpenAI
 
 from chroma_vectore_store import ChromaVectoreStore
 from embedding import create_embedding_model
-from hana_vectore_store import HanaVectoreStore
+from hana_vectore_store import HanaVectorStore
 
 
-def main(vector_store: HanaVectoreStore | ChromaVectoreStore) -> None:
+def main(vector_store: HanaVectorStore | ChromaVectoreStore) -> None:
     set_debug(True)
 
     query = "2024年の流行語大賞は？"
@@ -31,7 +31,7 @@ Answer:
         vector_store.close()
 
 
-def similarity_search(vector_store: HanaVectoreStore | ChromaVectoreStore) -> None:
+def similarity_search(vector_store: HanaVectorStore | ChromaVectoreStore) -> None:
     query = "2024年の流行語大賞は？"
     vector_store.open()
     try:
@@ -43,7 +43,7 @@ def similarity_search(vector_store: HanaVectoreStore | ChromaVectoreStore) -> No
 
 if __name__ == "__main__":
     embedding_model = create_embedding_model()
-    vector_store = HanaVectoreStore(embedding_model)
+    vector_store = HanaVectorStore(embedding_model)
     # vector_store = ChromaVectoreStore(embedding_model)
     # similarity_search(vector_store)
     main(vector_store)
