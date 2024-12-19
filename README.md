@@ -2,6 +2,8 @@
 
 ## Getting started
 
+Required Python >= 3.10.
+
 ### When using SAP HANA Cloud for vector store
 
 ```shell

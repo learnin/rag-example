@@ -25,6 +25,8 @@ def split_docs(docs: Iterable[Document], chunk_size: int, chunk_overlap: int) ->
 
 if __name__ == "__main__":
     embedding_model = create_embedding_model()
-    vector_store = HanaVectorStore(embedding_model)
+    with HanaVectorStore(embedding_model) as vector_store:
+        main(vector_store)
     # vector_store = ChromaVectoreStore(embedding_model)
-    main(vector_store)
+    # main(vector_store)
+    

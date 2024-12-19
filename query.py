@@ -21,29 +21,22 @@ Answer:
 """
     prompt = ChatPromptTemplate.from_template(template)
     llm = ChatOpenAI(model="gpt-4o-mini")
-
-    vector_store.open()
-    try:
-        chain: Runnable = {"context": vector_store.as_retriever(), "question": RunnablePassthrough()} | prompt | llm
-        response = chain.invoke(query)
-        print(response.content)
-    finally:
-        vector_store.close()
+    chain: Runnable = {"context": vector_store.as_retriever(), "question": RunnablePassthrough()} | prompt | llm
+    response = chain.invoke(query)
+    print(response.content)
 
 
 def similarity_search(vector_store: HanaVectorStore | ChromaVectoreStore) -> None:
     query = "2024年の流行語大賞は？"
-    vector_store.open()
-    try:
-        docs = vector_store.similarity_search(query, 5)
-        print(docs)
-    finally:
-        vector_store.close()
+    docs = vector_store.similarity_search(query, 5)
+    print(docs)
 
 
 if __name__ == "__main__":
     embedding_model = create_embedding_model()
-    vector_store = HanaVectorStore(embedding_model)
+    with HanaVectorStore(embedding_model) as vector_store:
+        main(vector_store)
+        # similarity_search(vector_store)
     # vector_store = ChromaVectoreStore(embedding_model)
+    # main(vector_store)
     # similarity_search(vector_store)
-    main(vector_store)
